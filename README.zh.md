@@ -46,7 +46,6 @@ op-permission-level=1
 ## 构建和测试
 
 ```bash
-./gradlew test
 ./gradlew runGameTest
 ./gradlew build
 ```
