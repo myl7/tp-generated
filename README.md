@@ -20,6 +20,8 @@ The mod uses each player's existing vanilla permission level:
 - Level 1 can teleport to coordinates only when the destination chunk is loaded or has completed terrain generation.
 - Level 2 and above keep Minecraft's unrestricted teleport commands.
 
+Vanilla permission level 1 also lets players bypass spawn protection. Grant level 1 only to players who may bypass spawn protection.
+
 Teleporting to an entity does not need the terrain check because the target entity is already in a loaded chunk. `/execute in <dimension> run tp ...` checks the destination in the selected dimension.
 
 The restriction applies to `/tp` and `/teleport`. Portals, ender pearls, chorus fruit, and teleports performed by other mods keep their normal behavior.
