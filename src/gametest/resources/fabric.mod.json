@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "tp-generated-test",
+  "version": "1.0.0",
+  "name": "TP Generated Game Tests",
+  "environment": "server",
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.myl7.tpgenerated.gametest.TpGeneratedGameTest"
+    ]
+  },
+  "depends": {
+    "tp-generated": "*",
+    "fabric-gametest-api-v1": "*"
+  }
+}
