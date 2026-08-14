@@ -1,29 +1,36 @@
 {
-	"schemaVersion": 1,
-	"id": "tp-generated",
-	"version": "${version}",
-	"name": "tp-generated",
-	"description": "Lets permission level 1 players use /tp and /teleport. Teleporting to coordinates inside a never-generated chunk still requires permission level 2.",
-	"authors": [
-		"myl7"
-	],
-	"contact": {
-		"sources": "https://github.com/myl7/tp-generated"
-	},
-	"license": "MIT",
-	"environment": "server",
-	"entrypoints": {
-		"main": [
-			"com.myl7.tpgenerated.TpGenerated"
-		]
-	},
-	"mixins": [
-		"tp-generated.mixins.json"
-	],
-	"depends": {
-		"fabricloader": ">=0.19.3",
-		"minecraft": "~26.2",
-		"java": ">=25",
-		"fabric-api": "*"
-	}
+  "schemaVersion": 1,
+  "id": "tp-generated",
+  "version": "${version}",
+  "name": "TP Generated",
+  "description": "Lets permission-level 1 players teleport only to chunks that have already been generated.",
+  "authors": [
+    {
+      "name": "Yulong Ming",
+      "contact": {
+        "email": "i@myl7.org"
+      }
+    }
+  ],
+  "contact": {
+    "homepage": "https://github.com/myl7/tp-generated",
+    "sources": "https://github.com/myl7/tp-generated",
+    "issues": "https://github.com/myl7/tp-generated/issues"
+  },
+  "license": "Apache-2.0",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "com.myl7.tpgenerated.TpGenerated"
+    ]
+  },
+  "mixins": [
+    "tp-generated.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "~26.2",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
 }
