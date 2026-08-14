@@ -46,7 +46,6 @@ Permission level 1 also bypasses vanilla spawn protection. Grant it only to play
 ## Build and test
 
 ```bash
-./gradlew test
 ./gradlew runGameTest
 ./gradlew build
 ```
