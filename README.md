@@ -1,63 +1,45 @@
 # TP Generated
 
-Server-side Fabric mod that lets permission-level 1 players use `/tp` and `/teleport` without letting them generate new terrain through coordinate teleports.
+TP Generated is a server-side Fabric mod that lets permission-level 1 players use `/tp` and `/teleport` while preventing coordinate teleports from generating new terrain.
 
 This document is also available in [中文](README.zh.md).
 
-## Behavior
+## Minecraft version
 
-- Permission level 0 cannot use `/tp` or `/teleport`.
-- Permission level 1 can teleport to coordinates when the destination chunk is loaded or has already reached the `minecraft:full` generation status on disk.
-- Teleporting to coordinates in a never-generated or partially generated chunk requires permission level 2.
-- Permission level 2 and above keep the normal unrestricted command behavior.
-- Entity-target teleports are unchanged because the target entity already occupies a loaded chunk.
-- Only the destination chunk is checked. The check reads its saved `Status` field without loading or generating the chunk.
-- `/execute in <dimension> run tp ...` checks the destination dimension.
-
-The mod affects the `/tp` and `/teleport` commands only. Portals, ender pearls, chorus fruit, and calls to the entity teleport API are unchanged.
-
-## Versions
-
-| Component | Version |
-| --- | --- |
-| Minecraft | 26.2 |
-| Fabric Loader | 0.19.3 or newer |
-| Fabric API | 0.156.0+26.2 |
-| Fabric Loom | 1.17.17 |
-| Gradle | 9.5.1 |
-| Java | 25 or newer |
+- 26.2
 
 ## Installation
 
-Install Fabric Loader, Fabric API, and the TP Generated JAR in the dedicated server's `mods` directory. Clients do not need this mod.
+Install Fabric Loader on the server, then put Fabric API and the TP Generated JAR in the server's `mods` directory. Clients do not need this mod.
 
-## Permission setup
+## Permission behavior
 
-Players need vanilla permission level 1. One option is to set the following value in `server.properties` and then use `/op`:
+The mod uses each player's existing vanilla permission level:
 
-```properties
-op-permission-level=1
-```
+- Level 0 cannot use `/tp` or `/teleport`.
+- Level 1 can teleport to coordinates only when the destination chunk is loaded or has completed terrain generation.
+- Level 2 and above keep Minecraft's unrestricted teleport commands.
 
-Administrators who need a higher level can be assigned a different level in `ops.json`. Alternatively, keep the server default and edit selected entries in `ops.json` to level 1 after using `/op`.
+Teleporting to an entity does not need the terrain check because the target entity is already in a loaded chunk. `/execute in <dimension> run tp ...` checks the destination in the selected dimension.
 
-Permission level 1 also bypasses vanilla spawn protection. Grant it only to players who should have that ability.
+The restriction applies to `/tp` and `/teleport`. Portals, ender pearls, chorus fruit, and teleports performed by other mods keep their normal behavior.
+
+## Limitations
+
+- The mod checks the destination chunk only. After the teleport, Minecraft may generate nearby chunks to fill the player's view distance.
+- A chunk that has completed only part of terrain generation counts as ungenerated.
+- Minecraft still applies its world border and build-height rules to the destination.
 
 ## Build and test
+
+Install JDK 25, then run:
 
 ```bash
 ./gradlew runGameTest
 ./gradlew build
 ```
 
-The built JAR is written to `build/libs/`. Fabric GameTest verifies the command requirements and the generated-chunk gate on a test server. GitHub Actions runs the tests and uploads the built JAR.
-
-## Known limits
-
-- The mod checks only the chunk containing the destination. After a successful teleport, normal view-distance loading may generate neighboring chunks.
-- An unloaded chunk requires one asynchronous storage read followed by a wait on the server thread. This happens only when a coordinate teleport command targets an unloaded chunk.
-- A partially generated proto-chunk is treated as ungenerated until its saved status is `minecraft:full`.
-- Coordinates outside the world border or build height still go through vanilla validation after the permission check.
+The built JAR is written to `build/libs/`.
 
 ## License
 
