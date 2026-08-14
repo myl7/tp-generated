@@ -71,9 +71,11 @@ public final class TpGeneratedGameTest {
 	public void levelTwoBypassesTheGeneratedChunkGate(GameTestHelper helper) {
 		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 		RecordingSource source = RecordingSource.create(player, LevelBasedPermissionSet.GAMEMASTER);
-		BlockPos outsideWorld = new BlockPos(40_000_000, 80, 0);
+		BlockPos destination = new BlockPos(10_000_000, 80, 10_000_000);
+		helper.assertFalse(helper.getLevel().hasChunkAt(destination), "the distant destination must start unloaded");
 
-		runTeleport(helper, source, outsideWorld);
+		runTeleport(helper, source, destination);
+		helper.assertTrue(source.failures.isEmpty(), "permission level 2 coordinate teleport should not fail");
 		helper.assertFalse(source.hasFailure(GENERATED_CHUNK_FAILURE),
 				"permission level 2 should bypass the generated-chunk gate");
 		helper.succeed();
