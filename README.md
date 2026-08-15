@@ -10,6 +10,8 @@ This document is also available in [中文](README.zh.md).
 
 ## Installation
 
+Download the JAR from the [releases page](https://github.com/myl7/tp-generated/releases).
+
 Install Fabric Loader on the server, then put Fabric API and the TP Generated JAR in the server's `mods` directory. Clients do not need this mod.
 
 ## Permission behavior

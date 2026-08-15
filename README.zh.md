@@ -10,6 +10,8 @@ TP Generated 是一个纯服务端 Fabric 模组。它允许 1 级权限玩家�
 
 ## 安装
 
+从 [releases 页面](https://github.com/myl7/tp-generated/releases)下载 JAR。
+
 在服务器安装 Fabric Loader，再把 Fabric API 和 TP Generated JAR 放入服务器的 `mods` 目录。客户端无需安装本模组。
 
 ## 权限规则
