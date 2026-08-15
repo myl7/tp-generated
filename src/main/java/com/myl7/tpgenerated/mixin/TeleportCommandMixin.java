@@ -58,16 +58,19 @@ public abstract class TeleportCommandMixin {
 
 		Vec3 dest = position.getPosition(source);
 		BlockPos blockPos = BlockPos.containing(dest.x, dest.y, dest.z);
+		ChunkPos chunkPos = new ChunkPos(blockPos.getX() >> 4, blockPos.getZ() >> 4);
 		// `level` is already the destination dimension, so `/execute in ... run tp` is
-		// handled correctly without extra work.
-		if (level.hasChunkAt(blockPos)) {
+		// handled correctly without extra work. The check goes through the chunk source
+		// rather than Level#isLoaded, which also requires the position to be inside the
+		// build height. Vanilla allows teleporting outside it, and being outside says
+		// nothing about whether the chunk was generated.
+		if (level.getChunkSource().hasChunk(chunkPos.x(), chunkPos.z())) {
 			return;
 		}
 
 		// Not loaded: read the chunk's Status straight from chunk storage. The scan runs on
 		// the IO worker thread and never triggers chunk generation; join() blocks the server
 		// thread for a single disk read, which is fine at command frequency.
-		ChunkPos chunkPos = new ChunkPos(blockPos.getX() >> 4, blockPos.getZ() >> 4);
 		CollectFields statusField = new CollectFields(new FieldSelector(StringTag.TYPE, "Status"));
 		level.getChunkSource().chunkMap.chunkScanner().scanChunk(chunkPos, statusField).join();
 		if (statusField.getResult() instanceof CompoundTag tag) {

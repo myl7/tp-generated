@@ -44,7 +44,7 @@ public final class TpGeneratedGameTest {
 		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 		RecordingSource source = RecordingSource.create(player, LevelBasedPermissionSet.MODERATOR);
 		BlockPos destination = helper.absolutePos(new BlockPos(2, 2, 2));
-		helper.assertTrue(helper.getLevel().hasChunkAt(destination), "the test destination must be loaded");
+		helper.assertTrue(isChunkLoaded(helper, destination), "the test destination must be loaded");
 
 		runTeleport(helper, source, destination);
 		helper.assertFalse(source.hasFailure(GENERATED_CHUNK_FAILURE),
@@ -57,12 +57,12 @@ public final class TpGeneratedGameTest {
 		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 		RecordingSource source = RecordingSource.create(player, LevelBasedPermissionSet.MODERATOR);
 		BlockPos destination = new BlockPos(5_000_000, 80, 5_000_000);
-		helper.assertFalse(helper.getLevel().hasChunkAt(destination), "the distant destination must start unloaded");
+		helper.assertFalse(isChunkLoaded(helper, destination), "the distant destination must start unloaded");
 
 		runTeleport(helper, source, destination);
 		helper.assertTrue(source.hasFailure(GENERATED_CHUNK_FAILURE),
 				"permission level 1 should be rejected for a never-generated chunk");
-		helper.assertFalse(helper.getLevel().hasChunkAt(destination),
+		helper.assertFalse(isChunkLoaded(helper, destination),
 				"the rejected command must not load the destination chunk");
 		helper.succeed();
 	}
@@ -72,13 +72,18 @@ public final class TpGeneratedGameTest {
 		Player player = helper.makeMockPlayer(GameType.SURVIVAL);
 		RecordingSource source = RecordingSource.create(player, LevelBasedPermissionSet.GAMEMASTER);
 		BlockPos destination = new BlockPos(10_000_000, 80, 10_000_000);
-		helper.assertFalse(helper.getLevel().hasChunkAt(destination), "the distant destination must start unloaded");
+		helper.assertFalse(isChunkLoaded(helper, destination), "the distant destination must start unloaded");
 
 		runTeleport(helper, source, destination);
 		helper.assertTrue(source.failures.isEmpty(), "permission level 2 coordinate teleport should not fail");
 		helper.assertFalse(source.hasFailure(GENERATED_CHUNK_FAILURE),
 				"permission level 2 should bypass the generated-chunk gate");
 		helper.succeed();
+	}
+
+	/** The same check the mixin makes: is the chunk column holding this position loaded? */
+	private static boolean isChunkLoaded(GameTestHelper helper, BlockPos pos) {
+		return helper.getLevel().getChunkSource().hasChunk(pos.getX() >> 4, pos.getZ() >> 4);
 	}
 
 	private static void runTeleport(GameTestHelper helper, RecordingSource source, BlockPos destination) {
